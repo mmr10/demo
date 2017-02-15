@@ -1,0 +1,69 @@
+version:  '2'
+
+networks:
+  prodnetwork:
+    driver: bridge
+
+
+volumes:
+  registry-stuff:
+    driver: local
+
+services:
+  mariadb:
+    image: mariadb
+    ports:
+     - "3307:3306"
+    hostname:
+      mariadb
+    privileged:
+      true
+    container_name:
+      mariadb
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=users
+    volumes:
+      - ./mariadb/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    networks:
+      - prodnetwork
+
+  elasticsearch:
+    build: ./elasticsearch
+    image: mahjoub/elasticsearch
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    hostname:
+      elasticsearch
+    privileged:
+      true
+    container_name:
+      elasticsearch
+    environment:
+      ES_JAVA_OPTS: "-Xms1g -Xmx1g"
+    networks:
+      - prodnetwork
+    volumes:
+      - ./elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+
+  kibana:
+    build: ./kibana
+    image: mahjoub/kibana
+    volumes:
+      - ./kibana/config/:/etc/kibana/
+    ports:
+      - "5601:5601"
+    hostname:
+      kibana
+    privileged:
+      true
+    container_name:
+      kibana
+    networks:
+      - prodnetwork
+    depends_on:
+      - elasticsearch
+
+
+
