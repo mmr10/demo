@@ -20,7 +20,7 @@ spring:
             hibernate.dialect : org.hibernate.dialect.MySQL5Dialect
     data:
         elasticsearch:
-            cluster-name: olbati
+            cluster-name: demo-owish
             cluster-nodes: 127.0.0.1:9300
 server :
     port: 7080

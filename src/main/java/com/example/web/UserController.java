@@ -45,8 +45,7 @@ public class UserController
         logger.debug("Call rest to authenticate with user name : {}", username);
 
         Object result = userService.authenticate(username, password, request) ;
-        return ResponseEntity.created(new URI("/authenticate"))
-                .body(result);
+        return ResponseEntity.ok(result);
 
     }
 
@@ -63,18 +62,6 @@ public class UserController
 
     }
 
-    private Optional<User> getCurrentUser()
-    {
-        SecurityContext securityContext = SecurityContextHolder.getContext();
-        Authentication authentication = securityContext.getAuthentication();
-        Optional<User> user = null;
-        if (authentication != null)
-        {
-            UserDetails springSecurityUser = (UserDetails) authentication.getPrincipal();
-            user = Optional.ofNullable((User) springSecurityUser);
-        }
-        return user;
-    }
 
     @RequestMapping(value = "/account",
             method = RequestMethod.GET,
@@ -86,20 +73,5 @@ public class UserController
                 .orElse(new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
     }
 
-    @RequestMapping(value = "/admin",
-            method = RequestMethod.GET,
-            produces = MediaType.APPLICATION_JSON_VALUE)
-    @Secured("ROLE_ADMIN")
-    public ResponseEntity<String> adminTestSecurity()  throws  Exception{
-        return new ResponseEntity<String>("if you see this result, it's mean you are identified as ADMIN", HttpStatus.OK);
-    }
 
-    @RequestMapping(value = "/user",
-            method = RequestMethod.GET,
-            produces = MediaType.APPLICATION_JSON_VALUE)
-    @Secured({"ROLE_USER","ROLE_ADMIN"})
-    public ResponseEntity<String> userTestSecurity()  throws  Exception{
-        return new ResponseEntity<String>("if you see this result, it's mean you are identified as simple user or admin", HttpStatus.OK);
-
-    }
 }
