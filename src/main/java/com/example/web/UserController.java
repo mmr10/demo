@@ -30,8 +30,6 @@ public class UserController
 
     private static Logger logger = LoggerFactory.getLogger(UserController.class);
 
-    @Inject
-    private AuthenticationManager authenticationManager;
 
     @Inject
     private UserService userService ;
