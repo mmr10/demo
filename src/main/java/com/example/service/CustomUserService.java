@@ -1,7 +1,7 @@
 package com.example.service;
 
 import com.example.domain.User;
-import com.example.repository.UserRepository;
+import com.example.repositoryJpa.UserRepository;
 import com.example.security.UserNotActivatedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,8 +18,6 @@ import java.util.Optional;
 public class CustomUserService implements UserDetailsService
 {
 
-    private static Logger logger = LoggerFactory.getLogger(CustomUserService.class);
-
     @Inject
     private UserRepository userRepository;
 
@@ -27,15 +25,14 @@ public class CustomUserService implements UserDetailsService
     public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException
     {
 
-        logger.info("Authenticating the user {}", login);
-        Optional<User> userFound = userRepository.findOneByUsername(login);
-        return userFound.map(user -> {
+        Optional<User> userBase = userRepository.findOneByUsername(login);
+        return userBase.map(user -> {
             if (!user.isEnabled())
             {
-                throw new UserNotActivatedException("User " + login + " has not been activated yet");
+                throw new UserNotActivatedException("User not active");
             }
             return user;
-        }).orElseThrow(() -> new UsernameNotFoundException("user " + login + " Not found in the database"));
+        }).orElseThrow(() -> new UsernameNotFoundException("user not found"));
     }
 
 

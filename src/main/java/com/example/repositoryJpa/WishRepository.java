@@ -1,4 +1,4 @@
-package com.example.repository;
+package com.example.repositoryJpa;
 
 
 import com.example.domain.Wish;

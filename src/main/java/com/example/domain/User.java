@@ -6,10 +6,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.*;
 
 @Entity
 @Table(name = "user")
@@ -45,13 +42,10 @@ public class User implements UserDetails
     @Column(name = "enabled", nullable = true, columnDefinition = "tinyint(1) default NULL")
     private boolean enabled;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "user_authority",
-            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
-            inverseJoinColumns = {@JoinColumn(name = "authority_id", referencedColumnName = "id")})
+    @ManyToOne(fetch=FetchType.EAGER)
+    @JoinColumn(name="ROLE_ID")
     @JsonIgnore
-    private Set<Authority> authorityList = new HashSet<>();
+    private Role role ;
 
     public static long getSerialVersionUID()
     {
@@ -90,15 +84,7 @@ public class User implements UserDetails
     }
 
 
-    public Set<Authority> getAuthorityList()
-    {
-        return authorityList;
-    }
 
-    public void setAuthorityList(Set<Authority> authorityList)
-    {
-        this.authorityList = authorityList;
-    }
 
     public String getFirstName()
     {
@@ -128,6 +114,14 @@ public class User implements UserDetails
     public void setEnabled(boolean enabled)
     {
         this.enabled = enabled;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     /**
@@ -166,7 +160,8 @@ public class User implements UserDetails
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities()
     {
-        return this.authorityList.stream().map(authority -> new SimpleGrantedAuthority(authority.getName())).collect(Collectors.toList());
+
+        return  Collections.singleton(new SimpleGrantedAuthority(role.getName()));
     }
 
 

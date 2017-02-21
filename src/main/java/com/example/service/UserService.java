@@ -1,13 +1,11 @@
 package com.example.service;
 
 
-import com.example.domain.Authority;
+import com.example.domain.Role;
 import com.example.domain.User;
-import com.example.repository.AuthorityRepository;
-import com.example.repository.UserRepository;
+import com.example.repositoryJpa.RoleRepository;
+import com.example.repositoryJpa.UserRepository;
 import com.example.security.SecurityUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,34 +23,13 @@ import java.util.Set;
 public class UserService
 {
 
-    private static Logger logger = LoggerFactory.getLogger(CustomUserService.class);
 
     @Inject
     private UserRepository userRepository;
 
     @Inject
-    private PasswordEncoder passwordEncoder;
-
-    @Inject
-    private AuthorityRepository authorityRepository;
-
-    @Inject
     private RestTemplate restTemplate ;
 
-    public User create(User user)
-    {
-
-        userRepository.findOneByUsername(user.getUsername())
-                .ifPresent(us -> new Exception("the user name" + us.getUsername() + " is already in user"));
-
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        Optional<Authority> authority = authorityRepository.findOneByName("ROLE_USER");
-        Set<Authority> authorities = new HashSet<>();
-        authorities.add(authority.get());
-        userRepository.save(user);
-        return user;
-
-    }
 
     @Transactional(readOnly = true)
     public User getUserWithAuthorities() throws  Exception{

@@ -1,4 +1,4 @@
-package com.example.repository.elastic;
+package com.example.repositoryElastic;
 
 import com.example.domain.Wish;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;

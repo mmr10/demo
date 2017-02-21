@@ -2,10 +2,8 @@ package com.example.service;
 
 
 import com.example.domain.Wish;
-import com.example.repository.WishRepository;
-import com.example.repository.elastic.WishSearchRepository;
-import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.context.event.EventListener;
+import com.example.repositoryJpa.WishRepository;
+import com.example.repositoryElastic.WishSearchRepository;
 import org.springframework.data.domain.Sort;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;

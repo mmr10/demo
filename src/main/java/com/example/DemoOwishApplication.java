@@ -12,8 +12,8 @@ import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 
 @SpringBootApplication
 @ComponentScan("com.example")
-@EnableJpaRepositories("com.example.repository")
-@EnableElasticsearchRepositories("com.example.repository.elastic")
+@EnableJpaRepositories("com.example.repositoryJpa")
+@EnableElasticsearchRepositories("com.example.repositoryElastic")
 @EnableWebSocketMessageBroker
 public class DemoOwishApplication extends AbstractWebSocketMessageBrokerConfigurer {
 

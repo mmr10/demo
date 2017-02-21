@@ -38,10 +38,6 @@ public class OAuth2ServerConfiguration
                 .exceptionHandling()
                 .authenticationEntryPoint(authenticationEntryPoint)
             .and()
-                .logout()
-                .logoutUrl("/api/logout")
-                .logoutSuccessHandler(ajaxLogoutSuccessHandler)
-            .and()
                 .csrf()
                 .disable()
                 .headers()
@@ -52,8 +48,7 @@ public class OAuth2ServerConfiguration
             .and()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                .antMatchers("/api/authenticate").permitAll()
-                .antMatchers("/api/register").permitAll();
+                .antMatchers("/api/authenticate").permitAll();
 
         }
     }

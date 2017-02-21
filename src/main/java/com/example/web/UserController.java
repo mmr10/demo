@@ -37,26 +37,13 @@ public class UserController
     @RequestMapping(value = "/authenticate",
             method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> authentictae(@RequestParam("username") String username,
+    public ResponseEntity<?> authenticate(@RequestParam("username") String username,
                                            @RequestParam("password") String password,HttpServletRequest request) throws URISyntaxException
     {
         logger.debug("Call rest to authenticate with user name : {}", username);
 
         Object result = userService.authenticate(username, password, request) ;
         return ResponseEntity.ok(result);
-
-    }
-
-    @RequestMapping(value = "/register",
-            method = RequestMethod.POST,
-            produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> register(@RequestBody User user) throws URISyntaxException
-    {
-        logger.debug("Call rest to create new  user  : {}", user);
-        User result = userService.create(user) ;
-
-        return ResponseEntity.created(new URI("/authenticate"))
-                .body(result);
 
     }
 
